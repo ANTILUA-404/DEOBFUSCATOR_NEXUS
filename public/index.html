@@ -135,7 +135,7 @@
     background:#1c2434;border:1px solid var(--border);color:var(--muted);
   }
 
-  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:8px}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(64px,1fr));gap:8px}
   .stat{background:#0d121b;border:1px solid var(--border);border-radius:9px;padding:9px 11px}
   .stat b{display:block;font-size:16px;font-weight:700;letter-spacing:-.4px;font-variant-numeric:tabular-nums}
   .stat span{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
@@ -378,8 +378,9 @@ function renderOk(d, ms){
   $('actions').style.display = 'flex';
 
   $('stats').innerHTML = [
-    ['String', s.replaced], ['Unik', s.uniqueStrings], ['Entri tabel', s.tableEntries],
-    ['Konstanta', s.constantsFolded], ['Rename', s.identifiersRenamed], ['Baris', d.code.split('\n').length],
+    ['String', s.replaced], ['Unik', s.uniqueStrings], ['Entri', s.tableEntries],
+    ['Konst.', s.constantsFolded], ['Rename', s.identifiersRenamed],
+    ['Semantik', s.semanticNames], ['Baris', d.code.split('\n').length],
   ].map(([k, v]) => `<div class="stat"><b>${(v ?? 0).toLocaleString('id-ID')}</b><span>${k}</span></div>`).join('');
   $('statsWrap').style.display = 'block';
 

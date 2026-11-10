@@ -1,8 +1,10 @@
 'use strict';
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const { deobfuscate } = require('../lib/deob');
 const { tokenize, checkBalance } = require('../lib/lua');
+const { check: syntaxCheck } = require('./syntaxcheck');
 
 const dir = process.argv[2] || '.';
 const files = fs.readdirSync(dir).filter(f => /\.(luau|lua)$/i.test(f)).sort();
@@ -22,12 +24,27 @@ for (const f of files) {
 
   const body = r.code.split('\n').filter(l => !l.startsWith('--')).join('\n');
   const bal = checkBalance(tokenize(body));
-  const bad = bal.ok ? '' : bal.reason;
+  let bad = bal.ok ? '' : bal.reason;
 
-  if (bal.ok) pass++; else fail++;
+  // Optional: compile the result with a real Lua parser (needs luajit on PATH
+  // or LUAJIT=<path>). Luau-only tokens are normalised first.
+  if (!bad) {
+    const tmp = path.join(os.tmpdir(), 'deob_' + process.pid + '_' + f + '.luau');
+    try {
+      fs.writeFileSync(tmp, r.code, 'utf8');
+      const syn = syntaxCheck(tmp);
+      if (!syn.ok) bad = 'syntax: ' + syn.err;
+    } catch (e) {
+      bad = 'syntax-check error: ' + e.message;
+    } finally {
+      try { fs.unlinkSync(tmp); } catch { /* ignore */ }
+    }
+  }
+
+  if (!bad) pass++; else fail++;
   rows.push({
     f,
-    status: bal.ok ? 'OK' : 'UNBALANCED',
+    status: bad ? 'INVALID' : 'OK',
     banner: r.fingerprint.banner,
     alpha: r.fingerprint.alphabetLength,
     xor: `${r.fingerprint.xorA}/${r.fingerprint.xorB}${r.fingerprint.transformOp === 'sub' ? '-' : '+'}`,

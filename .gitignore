@@ -11,3 +11,6 @@ resp.json
 out.luau
 api_out.luau
 variant.luau
+
+# archives
+*.zip

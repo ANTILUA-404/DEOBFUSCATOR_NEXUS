@@ -1,0 +1,13 @@
+node_modules/
+npm-debug.log*
+*.log
+.DS_Store
+.env
+.env.*
+
+# local test artifacts
+payload.json
+resp.json
+out.luau
+api_out.luau
+variant.luau

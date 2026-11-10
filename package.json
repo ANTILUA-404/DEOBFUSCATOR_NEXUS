@@ -1,0 +1,15 @@
+{
+  "name": "nxs9-deobfuscator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Web deobfuscator for StudioDev57 / NXS9 obfuscated Luau scripts",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}

@@ -6,7 +6,11 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "test": "node tools/selftest.js",
+    "test:sweep": "node tools/selftest.js --sweep",
+    "test:guard": "node tools/guard.js",
+    "test:all": "node tools/selftest.js --sweep && node tools/selftest.js --keep && node tools/guard.js && node tools/syntaxcheck.js sample.nxs9.lua"
   },
   "engines": {
     "node": ">=18"
